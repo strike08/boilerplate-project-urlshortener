@@ -1,4 +1,5 @@
 require('dotenv').config();
+const isHttp = require('is-http-url');
 const bodyParser = require('body-parser');
 const express = require('express');
 const cors = require('cors');
@@ -36,7 +37,7 @@ app.get('/api/shorturl/:urlShort', function(req, res) {
 
 app.post('/api/shorturl', async (req, res) => {
   try {
-    console.log(req.body);
+    if (!isHttp(req.body.url)) throw new Error('invalid url');
     let url = new URL(req.body.url);
     let data = await findUrl(url.href);
     if (data) {
